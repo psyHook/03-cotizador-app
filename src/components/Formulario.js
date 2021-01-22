@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
+import { obtenerDiferenciaYear, calcularMarca, obtenerPlan } from "../helpers/helper";
 
 const Campo = styled.div`
   display: flex;
@@ -81,23 +82,36 @@ const Formulario = () => {
 
     setError(false);
 
+    // Una base de 2000
+    let resultado = 2000;
+
     // Obtener la diferencia de años
+    const diferencia = obtenerDiferenciaYear(year);
 
     // Por cada año restar el 3%
+    resultado -= ((diferencia * 3) * resultado) / 100;
+
+
 
     // Americano 15%
     // Asiatico 5%
     // Europeo 30%
+    resultado = calcularMarca(marca) * resultado; 
+    
+
 
     // Basico aumenta 20%
     // Completo 50%
+    const incrementoPlan = obtenerPlan(plan)
+    resultado = parseFloat( incrementoPlan * resultado ).toFixed(2);
 
+    console.log(resultado)
     // Total
   };
 
   return (
     <form onSubmit={cotizarSeguro}>
-        { error ? <Error>Todos los campos son obligatorios</Error> : null }
+      {error ? <Error>Todos los campos son obligatorios</Error> : null}
       <Campo>
         <Label>Marca</Label>
         <Select name="marca" value={marca} onChange={obtenerInformacion}>
